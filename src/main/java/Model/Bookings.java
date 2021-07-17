@@ -2,12 +2,23 @@ package Model;
 
 import java.time.Instant;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
+
+@Entity
+@NamedQueries({
+	@NamedQuery(name="Bookings.countBookings",query="SELECT count(*) from Bookings")
+})
 public class Bookings {
 	
 
-	public Bookings(Node departure, Node destination, int bookingId, int passengerId, int vehicleId, int code,
+	public Bookings(Node departure, Node destination, String bookingId, int passengerId, int vehicleId, int code,
 			boolean isConfirmed) {
 		super();
 		this.departure = departure;
@@ -31,10 +42,10 @@ public class Bookings {
 	public void setDestination(Node destination) {
 		this.destination = destination;
 	}
-	public int getBookingId() {
+	public String getBookingId() {
 		return bookingId;
 	}
-	public void setBookingId(int bookingId) {
+	public void setBookingId(String bookingId) {
 		this.bookingId = bookingId;
 	}
 	public int getPassengerId() {
@@ -68,9 +79,11 @@ public class Bookings {
 		this.isConfirmed = isConfirmed;
 	}
 	
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	
 	public Node departure;
 	public Node destination;
-	private int bookingId;
+	@Id private String bookingId;
 	private int passengerId;
 	private int vehicleId;
 	private int code;
