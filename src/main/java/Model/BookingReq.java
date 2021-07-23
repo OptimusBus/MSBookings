@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class BookingReq {
 	
 	
-	public BookingReq(int passengerId, int vehicleId, Node departure, Node destination) {
+	public BookingReq(String passengerId, String vehicleId, Node departure, Node destination) {
 		super();
 		this.passengerId = passengerId;
 		this.vehicleId = vehicleId;
@@ -16,16 +16,16 @@ public class BookingReq {
 	
 	
 
-	public int getPassengerId() {
+	public String getPassengerId() {
 		return passengerId;
 	}
-	public void setPassengerId(int passengerId) {
+	public void setPassengerId(String passengerId) {
 		this.passengerId = passengerId;
 	}
-	public int getVehicleId() {
+	public String getVehicleId() {
 		return vehicleId;
 	}
-	public void setVehicleId(int vehicleId) {
+	public void setVehicleId(String vehicleId) {
 		this.vehicleId = vehicleId;
 	}
 	public Node getDeparture() {
@@ -41,8 +41,8 @@ public class BookingReq {
 		this.destination = destination;
 	}
 
-	private int passengerId;
-	private int vehicleId;
+	private String passengerId;
+	private String vehicleId;
 	public Node departure;
 	public Node destination;
 	

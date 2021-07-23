@@ -1,13 +1,21 @@
-package Service;
+package service;
+
+import java.util.List;
+import java.util.Random;
+
+import model.Booking;
+import model.Node;
 
 public interface BranchLocal {
 				
-	
-public int createBooking(int passengerId,double fromLong,double fromLat,double toLong,double toLat,int vehicleId);
-public boolean confirmBooking(String username,int vehicleId,int code);
-public int findAllBooking(String username); // metodo che ritorna le prenotazioni in relazione a quel username
-public int findAllBookingDate(long timestamp); // metodo che ritorna le prenotazioni in relazione a quella data
-public int finAllBookingUs(String username,long timestamp);// metodo che ritorna le prenotazioni del cliente in quella data
+public int calcCode() ;
+public Booking createBooking(Booking b);
+public Booking confirmBookings(String bookingId);
+public Booking getBooking(String bookingId); 
+public String calcBookingId();
+public List<Booking> findAllBooking(String passengerId); // metodo che ritorna le prenotazioni in relazione a quel username
+
+
 
 
 

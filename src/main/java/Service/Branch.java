@@ -1,67 +1,94 @@
-package Service;
+package service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import Model.Bookings;
-import Model.Node;
+import org.bson.Document;
 
-@Stateless
+import db.MongoConnector;
+import model.Booking;
+import model.Location;
+import model.Node;
+
 public class Branch implements BranchLocal {
 	
-	@PersistenceContext
-	EntityManager em;
+	MongoConnector m=new MongoConnector();
+	
 	public Branch() {}
 	
 	
+	
+	
+	
+	
+	
+	public Booking confirmBookings(String bookingId) {
+		Booking v = Booking.decodeBooking(m.getBookingsById(bookingId));
+		v.setConfirmed(true);
+		m.updateBookings(v);
+		return v;
+	}
+	
 
-	@Override
-	public int createBooking(int passengerId, double fromLong, double fromLat, double toLong, double toLat,
-			int vehicleId) {
+	
+
+	public Booking getBooking(String bookingId) {
+		Document v=m.getBookingsById(bookingId);
+		return Booking.decodeBooking(v);
 		
-		int c= em.createNamedQuery("Bookings.countBookings",Integer.class).getSingleResult();
+	}
+	
+	public String calcBookingId() {
+		
+		long c= m.getBookingsCount();
 		c++;
 		
-		String a= " "+c;
+		String a= ""+c;
 		int l=a.length();
-		String id= " ";
+		String id= "";
 		if(l<2) id ="B"+ "00000"+a;
 		else if(l<3) id= "B" + "0000"+a;
 		else if(l<4) id= "B" + "000"+a;
 		else if(l<5) id= "B" + "00"+a;
 		else if(l<6) id= "B" + "0" +a;
 		else id="B"+a;
-		
-		
-		
-		
-		// TODO Auto-generated method stub
-		return 0;
+	
+		return id;
 	}
 
-	@Override
-	public boolean confirmBooking(String username, int vehicleId, int code) {
-		// TODO Auto-generated method stub
-		return false;
+	
+	public List<Booking> findAllBooking(String passengerId) {
+		List<Document> ld = m.allBookingsByPassengerId(passengerId);
+		List<Booking> lv = new ArrayList<Booking>();
+		for(Document d : ld) {
+			lv.add(Booking.decodeBooking(d));
+		}
+		return lv;
 	}
 
-	@Override
-	public int findAllBooking(String username) {
-		// TODO Auto-generated method stub
-		return 0;
+	public Booking createBooking(Booking b) {
+		
+		m.persist(b);
+		return b;
+	}
+	
+	public int calcCode() {
+		return 100000 + (new Random().nextInt(900000));
 	}
 
-	@Override
-	public int findAllBookingDate(long timestamp) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
-	@Override
-	public int finAllBookingUs(String username, long timestamp) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+
+
+
+
+
+
+	
 
 }
+	
