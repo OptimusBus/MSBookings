@@ -7,6 +7,7 @@ import java.util.List;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -23,7 +24,7 @@ public class MongoConnector {
 	public MongoConnector() {}
 	
 	
-	public List<Document> ConfirmBookings(boolean isConfirmed){
+	public List<Document> confirmedBookings(boolean isConfirmed){
 		MongoDatabase db= m.getDatabase("BookingsDB");
 		MongoCollection<Document> collection = db.getCollection("bookings");
 		return collection.find(Filters.eq("isConfirmed",true)).into(new ArrayList<Document>());
@@ -70,8 +71,27 @@ public class MongoConnector {
 	}
 	
 	
+	public List<Document> getAllWaitingBookings(){
+		MongoDatabase db= m.getDatabase("BookingDB");
+		MongoCollection<Document> coll=db.getCollection("bookings");
+		return coll.find(Filters.eq("status", "WAITING")).into(new ArrayList<Document>());
+				
+	}
 	
-	private static final MongoClient m= new MongoClient("172.18.10.144",31181);
+
+	public List<Document> getAllOnBoardBookings(String vehicleId){
+		MongoDatabase db= m.getDatabase("BookingDB");
+		MongoCollection<Document> coll=db.getCollection("bookings");
+		BasicDBObject criteria=new BasicDBObject();
+		criteria.append("vehicleId", vehicleId);
+		criteria.append("status", "ONBOARD");
+		return coll.find(criteria).into(new ArrayList<Document>());
+				
+	}
+	
+	
+	
+	private static final MongoClient m= new MongoClient("132.121.170.248",31183);
 		
 	}
 	

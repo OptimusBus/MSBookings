@@ -76,6 +76,24 @@ public class BookingsController {
 		
 	}
 	
+	@GET
+	@Path("/status/waiting")
+	public Response getAllWaitingBookings() {
+		List<Booking> v=branch.findAllWaitingBooking();
+		if(v==null) return Response.status(404).build();
+		return Response.ok(v).build();
+	}
+	
+	@GET
+	@Path("/status/onboard/{vehicleId}")
+	public Response getAllOnBoardBookings(@PathParam("vehicleId") String vehicleId) {
+		List<Booking> v=branch.findAllOnBoardBooking(vehicleId);
+		if(v==null) return Response.status(404).build();
+		return Response.ok(v).build();
+	}
+		
+	
+	
 	@POST
 	@Path("/create")
 	public Response createBooking(String request) throws URISyntaxException {

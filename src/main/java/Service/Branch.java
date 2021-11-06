@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import javax.ejb.Stateless;
+import javax.faces.flow.builder.ReturnBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -80,8 +81,26 @@ public class Branch implements BranchLocal {
 	public int calcCode() {
 		return 100000 + (new Random().nextInt(900000));
 	}
-
-
+	
+	public List<Booking> findAllWaitingBooking(){
+		List<Document> ld = m.getAllWaitingBookings();
+		List<Booking> lv = new ArrayList<Booking>();
+		for(Document d : ld) {
+			lv.add(Booking.decodeBooking(d));
+		}
+		return lv;
+	
+	}
+	
+	public List<Booking> findAllOnBoardBooking(String vehicleId){
+		List<Document> ld = m.getAllOnBoardBookings(vehicleId);
+		List<Booking> lv = new ArrayList<Booking>();
+		for(Document d : ld) {
+			lv.add(Booking.decodeBooking(d));
+		}
+		return lv;
+	
+	}
 
 
 

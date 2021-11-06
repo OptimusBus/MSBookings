@@ -6,6 +6,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.bson.Document;
 
+
+
 @XmlRootElement
 
 
@@ -36,13 +38,26 @@ public class Booking {
 		this.code = code;
 		this.isConfirmed = isConfirmed;
 		this.timestamp = timestamp;
+		this.status= Booking.Status.CREATED;
+	}
+	
+	public Booking(Node departure, Node destination, String bookingId, String passengerId, String vehicleId, int code,
+			boolean isConfirmed, String timestamp,Status status) {
+		super();
+		this.departure = departure;
+		this.destination = destination;
+		this.bookingId = bookingId;
+		this.passengerId = passengerId;
+		this.vehicleId = vehicleId;
+		this.code = code;
+		this.isConfirmed = isConfirmed;
+		this.timestamp = timestamp;
+		this.status= status;
 	}
 	
 	
 	public Booking() {}
-	public Booking(String passengerId2, Node departure,Node destination, String vehicleId2,boolean isConfirmed) {
-		// TODO Auto-generated constructor stub
-	}
+	
 
 	public Node getDeparture() {
 		return departure;
@@ -95,6 +110,15 @@ public class Booking {
 		this.isConfirmed = isConfirmed;
 	}
 	
+	
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
 	public static Booking decodeBooking(Document d) {
 		if(d.size()==0) return null;
 		String bid=d.getString("bookingId");
@@ -105,7 +129,14 @@ public class Booking {
 		Node departure=Node.decodeNode((Document)d.get("departure"));
 		Node destination=Node.decodeNode((Document)d.get("destination"));
 		String timestamp=d.getString("timestamp");
-		return new Booking(departure, destination, bid, pid, vid, code, ic, timestamp);
+		Status s;
+		if(d.getString("status").equalsIgnoreCase("CREATED")) s=Booking.Status.CREATED;
+		else if(d.getString("status").equalsIgnoreCase("ONBOARD")) s=Booking.Status.ONBOARD;
+		else if(d.getString("status").equalsIgnoreCase("WAITING")) s=Booking.Status.WAITING;
+		else if(d.getString("status").equalsIgnoreCase("CLOSED")) s=Booking.Status.CLOSED;
+		else s=Booking.Status.CANCELED;
+					
+		return new Booking(departure, destination, bid, pid, vid, code, ic, timestamp, s);
 	}
 	
 	public static Document encodeBooking(Booking b) {
@@ -117,6 +148,7 @@ public class Booking {
 		v.append("code", b.getCode());
 		v.append("timestamp", b.getTimestamp());
 		v.append("isConfirmed", b.isConfirmed());
+		v.append("status", b.getStatus().toString());
 		return v;
 		
 		
@@ -130,7 +162,8 @@ public class Booking {
 	private int code;
 	private String timestamp=""+Instant.now().getEpochSecond();
 	private boolean isConfirmed=false;
-	
+	public static enum Status { CREATED, ONBOARD, CANCELED, CLOSED, WAITING }
+	private Status status;
 	
 	
 }
