@@ -72,7 +72,7 @@ public class MongoConnector {
 	
 	
 	public List<Document> getAllWaitingBookings(){
-		MongoDatabase db= m.getDatabase("BookingDB");
+		MongoDatabase db= m.getDatabase("BookingsDB");
 		MongoCollection<Document> coll=db.getCollection("bookings");
 		return coll.find(Filters.eq("status", "WAITING")).into(new ArrayList<Document>());
 				
@@ -80,7 +80,7 @@ public class MongoConnector {
 	
 
 	public List<Document> getAllOnBoardBookings(String vehicleId){
-		MongoDatabase db= m.getDatabase("BookingDB");
+		MongoDatabase db= m.getDatabase("BookingsDB");
 		MongoCollection<Document> coll=db.getCollection("bookings");
 		BasicDBObject criteria=new BasicDBObject();
 		criteria.append("vehicleId", vehicleId);
